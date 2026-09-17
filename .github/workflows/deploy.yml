@@ -99,7 +99,7 @@ jobs:
             # Always pull full repo then copy backend files to root
             echo "📦 Syncing code..."
             rm -rf _deploy_tmp
-            git clone --depth 1 https://github.com/jathu3461-eng/Matrimony_Website.git _deploy_tmp
+            git clone --depth 1 https://github.com/jathu3461-eng/Matriomny.git _deploy_tmp
 
             # Copy backend files to app root (preserving uploads/ and data/ if they exist)
             rsync -av --exclude='node_modules' --exclude='.git' --exclude='uploads' --exclude='data' _deploy_tmp/matrimony-app/backend/ ./
