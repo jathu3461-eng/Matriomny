@@ -439,6 +439,355 @@ button {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   PHONE INPUT COMPONENT
+   ═══════════════════════════════════════════════════════════ */
+
+/* Outer field wrapper (non-floating variant) */
+.phone-field-wrap {
+  position: relative;
+}
+
+/* Floating-label field wrapper overrides */
+.phone-fl-field {
+  position: relative;
+}
+.phone-fl-field .phone-fl-label {
+  /* Floating label anchored to the text input part (after the country btn) */
+  left: 6.5rem;
+}
+.phone-fl-field .phone-number-input:focus ~ .phone-fl-label,
+.phone-fl-field .phone-number-input:not(:placeholder-shown) ~ .phone-fl-label {
+  top: 0.45rem;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+/* The composite row: [flag btn] | [number input] */
+.phone-input-wrap {
+  display: flex;
+  align-items: stretch;
+  border-radius: 0.9rem;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: visible;
+  position: relative;
+}
+.phone-input-wrap:hover:not(.phone-input-disabled) {
+  border-color: var(--primary-strong);
+}
+.phone-input-focused {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+.phone-input-wrap.input-error {
+  border-color: var(--error) !important;
+  background: var(--error-soft);
+}
+.phone-input-wrap.input-error.phone-input-focused {
+  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.15);
+}
+.phone-input-wrap.input-success {
+  border-color: var(--success) !important;
+}
+.phone-input-disabled {
+  background: var(--surface-muted);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Country selector button */
+.phone-country-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 0.75rem 0 0.85rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink);
+  flex-shrink: 0;
+  min-width: 5.25rem;
+  transition: background 0.15s ease;
+  border-radius: 0.85rem 0 0 0.85rem;
+}
+.phone-country-btn:hover:not(:disabled) {
+  background: var(--surface-soft);
+}
+.phone-country-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -2px;
+  border-radius: 0.85rem 0 0 0.85rem;
+}
+.phone-country-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Flag emoji */
+.phone-flag {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Dial code text */
+.phone-dial-code {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* Chevron arrow */
+.phone-chevron {
+  color: var(--ink-faint);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  margin-left: 1px;
+}
+.phone-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* Vertical divider between selector and input */
+.phone-divider {
+  width: 1.5px;
+  background: var(--border);
+  align-self: stretch;
+  margin: 0.6rem 0;
+  flex-shrink: 0;
+}
+
+/* The actual number input */
+.phone-number-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--ink);
+  font-size: 16px;
+  padding: 0.85rem 1rem 0.85rem 0.85rem;
+  min-width: 0;
+  font-family: inherit;
+}
+.phone-number-input::placeholder {
+  color: var(--ink-faint);
+}
+.phone-number-input:disabled {
+  cursor: not-allowed;
+  color: var(--ink-faint);
+}
+
+/* Floating label — reset: positioned relative to the phone-input-wrap */
+.phone-fl-label {
+  position: absolute;
+  top: 1.05rem;
+  left: 6.5rem;         /* sits after the country btn */
+  font-size: 16px;
+  color: var(--ink-faint);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+.phone-number-input:focus ~ .phone-fl-label,
+.phone-number-input:not(:placeholder-shown) ~ .phone-fl-label {
+  top: 0.38rem;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+/* Floating-label: taller input to accommodate label above */
+.phone-fl-field .phone-number-input {
+  padding-top: 1.35rem;
+  padding-bottom: 0.5rem;
+}
+.phone-fl-field .phone-country-btn {
+  /* Align button vertically in the taller field */
+  padding-top: 0.42rem;
+}
+
+/* ── Dropdown ──────────────────────────────────────────────────────────────── */
+.phone-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 9999;
+  width: 300px;
+  max-width: calc(100vw - 1rem);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+  animation: scale-in 0.15s ease-out both;
+}
+
+/* Search box area */
+.phone-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+.phone-search-icon {
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+.phone-search {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--ink);
+  font-size: 13.5px;
+  padding: 0.25rem 0;
+  font-family: inherit;
+}
+.phone-search::placeholder {
+  color: var(--ink-faint);
+}
+.phone-search-clear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+}
+.phone-search-clear:hover {
+  color: var(--ink);
+}
+
+/* Scrollable list */
+.phone-dropdown-list {
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.35rem 0;
+}
+.phone-dropdown-list::-webkit-scrollbar {
+  width: 4px;
+}
+.phone-dropdown-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.phone-dropdown-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* Section label ("Popular") */
+.phone-dropdown-section {
+  padding: 0.3rem 0.85rem 0.15rem;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+/* Divider between popular and all */
+.phone-dropdown-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.35rem 0;
+}
+
+/* Country row */
+.phone-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.85rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s ease;
+}
+.phone-dropdown-item:hover {
+  background: var(--surface-soft);
+}
+.phone-dropdown-item-selected {
+  background: var(--primary-soft);
+}
+.phone-dropdown-item-selected:hover {
+  background: var(--primary-soft);
+}
+.phone-dropdown-flag {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.phone-dropdown-name {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.phone-dropdown-item-selected .phone-dropdown-name {
+  font-weight: 700;
+  color: var(--primary);
+}
+.phone-dropdown-code {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.phone-dropdown-empty {
+  padding: 0.85rem;
+  font-size: 13px;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* Dark mode overrides */
+[data-theme='dark'] .phone-country-btn:hover:not(:disabled) {
+  background: var(--surface-muted);
+}
+[data-theme='dark'] .phone-dropdown {
+  border-color: var(--border-strong);
+}
+[data-theme='dark'] .phone-search-wrap {
+  background: var(--surface-muted);
+}
+[data-theme='dark'] .phone-dropdown-item:hover {
+  background: var(--surface-muted);
+}
+[data-theme='dark'] .phone-dropdown-item-selected {
+  background: var(--primary-soft);
+}
+
+/* ── Responsive: on very small screens, use full-width dropdown ──────────── */
+@media (max-width: 380px) {
+  .phone-dropdown {
+    width: calc(100vw - 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════
    BUTTONS
    ═══════════════════════════════════════════════════════════ */
 .btn {

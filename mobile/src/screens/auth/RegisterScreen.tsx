@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
 import { FormField } from '@/components/FormField';
+import { PhoneInput } from '@/components/PhoneInput';
 import { Screen } from '@/components/Screen';
 import { AnimatedLogo } from '@/components/AnimatedLogo';
 import { authApi } from '@/api/auth';
@@ -61,6 +62,7 @@ export function RegisterScreen() {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  // phone stores full E.164 (e.g. "+94771234567"); PhoneInput manages the split
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -204,15 +206,17 @@ export function RegisterScreen() {
               error={errors.email}
               hint={HINTS.email}
             />
-            <FormField
-              label="Phone number"
+            <PhoneInput
+              label="Mobile Number"
               value={phone}
-              onChangeText={setPhone}
+              onChange={(e164) => {
+                setPhone(e164);
+                // mark as touched so validation shows
+                touch('phone');
+              }}
               onBlur={() => touch('phone')}
-              placeholder="e.g. +919876543210"
-              keyboardType="phone-pad"
               error={errors.phone}
-              hint={HINTS.phone}
+              hint="Sri Lanka (+94) selected by default"
             />
             <FormField
               label="Password"

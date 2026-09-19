@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/store/authSlice';
 import { useTheme, ThemeMode } from '@/theme';
 import { radius, spacing, typography, layout } from '@/theme';
+import { formatPhoneDisplay } from '@/utils/phoneUtils';
 
 const THEME_OPTIONS: { label: string; value: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[] = [
   { label: 'Light', value: 'light', icon: 'sunny' },
@@ -46,7 +47,7 @@ export function SettingsScreen() {
           <Text style={[styles.sectionLabel, { color: colors.inkFaint }]}>Account</Text>
           <Row icon="person" label="Username" value={user?.username} colors={colors} />
           <Row icon="mail" label="Email" value={user?.email} colors={colors} />
-          <Row icon="call" label="Phone" value={user?.phone_number} colors={colors} />
+          <Row icon="call" label="Phone" value={user?.phone_number ? formatPhoneDisplay(user.phone_number) : null} colors={colors} />
           <Row icon="shield-checkmark" label="Role" value={user?.role} colors={colors} />
         </View>
 

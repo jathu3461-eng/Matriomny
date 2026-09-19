@@ -47,7 +47,7 @@ export function validateEmailOrPhone(value: string): string | null {
 }
 
 export function validatePhone(value: string): string | null {
-  if (!PHONE_RE.test(value)) return 'Enter a valid phone number (e.g. +14165550198)';
+  if (!PHONE_RE.test(value)) return 'Enter a valid phone number (e.g. +94771234567)';
   return null;
 }
 
@@ -351,7 +351,7 @@ export function validateProfileStep(step: number, form: ProfileForm): Record<str
 export const HINTS = {
   username: 'Letters, spaces, and \' . - only',
   email: 'name@example.com',
-  phone: '+14165550198',
+  phone: '+94 771234567 (Sri Lanka default, or select your country)',
   password: 'Min 8 chars, 1 uppercase, 1 special character',
   confirm: 'Re-enter your password',
   businessName: 'Your agency name (min 2 characters)',

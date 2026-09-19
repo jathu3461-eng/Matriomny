@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useSearchParams, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Check, CheckCircle2, Eye, EyeOff, Lock, Mail, Phone, ShieldCheck, User } from 'lucide-react';
+import { Building2, Check, CheckCircle2, Eye, EyeOff, Lock, Mail, ShieldCheck, User } from 'lucide-react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useI18n } from '../context/I18nContext';
 import AuthLayout from '../components/auth/AuthLayout';
-import { Button, TextField, ErrorCard } from '../components/ui';
+import { Button, TextField, PhoneInput, ErrorCard } from '../components/ui';
 import { createSignupSchema, normalizeApiErrors, passwordRules } from '../lib/validation';
 
 const VAL_MSG_KEYS = {
@@ -19,7 +19,7 @@ const VAL_MSG_KEYS = {
   'Invalid email format (e.g. name@example.com)': 'err_email_format',
   'Minimum 8 characters': 'err_pw_min',
   'Needs at least 1 uppercase letter and 1 special character': 'err_pw_rules',
-  'Enter a valid phone number (e.g. +14165550198)': 'err_phone',
+  'Enter a valid phone number (e.g. +94771234567)': 'err_phone',
   'Required. Minimum 2 characters': 'err_business_min',
   'Too long (maximum 80 characters)': 'err_business_max',
   'Confirm your password': 'err_confirm_required',
@@ -145,16 +145,12 @@ export default function Signup() {
       return;
     }
 
-    let formattedPhone = values.phone_number.trim();
-    if (formattedPhone && !formattedPhone.startsWith('+')) {
-      formattedPhone = '+' + formattedPhone.replace(/\D/g, '');
-    }
-
+    // PhoneInput always provides a full E.164 value — no manual formatting needed.
     const payload = {
       username: values.username.trim().replace(/\s+/g, '_'),
       email: values.email.trim(),
       password: values.password,
-      phone_number: formattedPhone,
+      phone_number: values.phone_number,
       business_name: isBroker ? values.business_name.trim() : undefined,
       role: isBroker ? 'broker' : 'regular',
     };
@@ -255,15 +251,12 @@ export default function Signup() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <TextField
+            <PhoneInput
               label={t('auth_mobile_label')}
-              placeholder={t('auth_mobile_placeholder')}
-              icon={<Phone className="w-4 h-4" />}
+              value={watch('phone_number')}
+              onChange={(e164) => setValue('phone_number', e164, { shouldValidate: touchedFields.phone_number })}
               error={showErr('phone_number')}
               success={showSuccess('phone_number', touchedFields.phone_number) ? t('auth_valid') : undefined}
-              autoComplete="tel"
-              inputMode="tel"
-              {...register('phone_number')}
             />
             <TextField
               label={t('auth_create_password')}

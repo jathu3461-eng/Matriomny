@@ -40,7 +40,7 @@ function validateSignup(body) {
   if (!body.password || !PASSWORD_RE.test(body.password))
     errors.password = 'Password too weak. Required: Min 8 chars, 1 uppercase, 1 special character';
   if (!body.phone_number || !PHONE_RE.test(body.phone_number))
-    errors.phone_number = 'Invalid Format. Expected format: +14165550198';
+    errors.phone_number = 'Invalid Format. Expected format: +94771234567';
   if (!['regular', 'broker'].includes(body.role))
     errors.role = 'Please select Regular User or Marriage Broker';
   if (body.role === 'broker' && (!body.business_name || body.business_name.trim().length < 2))
